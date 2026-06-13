@@ -146,9 +146,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       if(btn && !done('video')){
-        btn.disabled = percent < 100;
-        btn.textContent = percent >= 100 ? '+10 XP' : '🔒 Chưa đủ thời gian xem';
-      }
+
+  if(percent >= 100){
+      btn.disabled = false;
+      btn.classList.remove('disabled');
+      btn.textContent = '🎁 Nhận 10 XP';
+  }else{
+      btn.disabled = true;
+      btn.textContent = '🔒 Chưa đủ thời gian xem';
+  }
+
+}
     }
 
     function startVideoTimer(){
