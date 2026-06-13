@@ -350,7 +350,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderStation();
 
-    window.addEventListener('beforeunload', stopVideoTimer);
+    renderStation();
+
+setTimeout(()=>{
+   startVideoTimer();
+},1000);
+
+window.addEventListener('beforeunload', stopVideoTimer);
 
   }catch(err){
     showFatal(err);
