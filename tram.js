@@ -1,12 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  function esc(s){
-    return String(s||'')
-      .replaceAll('&','&amp;')
-      .replaceAll('"','&quot;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;');
-  }
-
   const stationBox = document.getElementById('stationBox');
   const titleEl = document.getElementById('stationTitle');
   const metaEl = document.getElementById('stationMeta');
@@ -64,6 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function pr(){ return VQTH6.userProgress(u.maHS); }
     function done(m){ return !!pr().missions?.[stationId+'_'+m]; }
     function testInfo(){ return pr().tests?.[stationId] || {attempt:0,best:0,last:0}; }
+    function esc(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
     function isImage(s){ return /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(String(s||'')); }
 
     function youtubeId(url){
@@ -153,16 +146,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const box=document.getElementById('ytPlayer');
         if(!box) return;
         box.innerHTML='';
-      ytPlayer = new YT.Player('ytPlayer',{
-  videoId,
-  playerVars:{
-    rel:0,
-    modestbranding:1,
-    playsinline:1,
-    enablejsapi:1,
-    origin: window.location.origin
-  },
-  events:{
+        ytPlayer = new YT.Player('ytPlayer',{
+          videoId,
+          playerVars:{rel:0,modestbranding:1,playsinline:1,enablejsapi:1,origin:window.location.origin},
+          events:{
             onReady(e){
               try{
                 videoDuration=e.target.getDuration()||0;
@@ -192,11 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const delta=cur-lastVideoTime;
           if(delta>0 && delta<2.5) watchedSeconds+=delta;
           lastVideoTime=cur;
-          if(videoDuration>0){
-            const pct=Math.floor(watchedSeconds/videoDuration*100);
-            console.log('YT progress:', Math.floor(watchedSeconds), '/', Math.floor(videoDuration), '=', pct+'%');
-            saveVideoProgress(pct, false);
-          }
+          if(videoDuration>0) saveVideoProgress(Math.floor(watchedSeconds/videoDuration*100), false);
         }catch(e){}
       },1000);
     }
@@ -276,6 +259,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </section>`;
     }
+
     function videoHtml(){
       const videoUrl=st.videoUrl||st.video_url||'';
       const id=youtubeId(videoUrl);
