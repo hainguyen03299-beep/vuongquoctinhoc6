@@ -148,7 +148,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         box.innerHTML='';
         ytPlayer = new YT.Player('ytPlayer',{
           videoId,
-          playerVars:{rel:0,modestbranding:1,playsinline:1,enablejsapi:1,origin:window.location.origin},
+         playerVars:{
+  rel:0,
+  modestbranding:1,
+  playsinline:1,
+  enablejsapi:1
+},
           events:{
             onReady(e){
               try{
