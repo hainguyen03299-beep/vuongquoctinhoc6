@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  function esc(s){
+    return String(s||'')
+      .replaceAll('&','&amp;')
+      .replaceAll('"','&quot;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;');
+  }
+
   const stationBox = document.getElementById('stationBox');
   const titleEl = document.getElementById('stationTitle');
   const metaEl = document.getElementById('stationMeta');
@@ -6,10 +14,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function showFatal(err){
     console.error(err);
+    const msg = String(err && err.message ? err.message : err || 'Không rõ lỗi')
+      .replaceAll('&','&amp;')
+      .replaceAll('"','&quot;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;');
     if(stationBox){
       stationBox.innerHTML = `<section class="panel warn">
         <h2>⚠️ Trang trạm đang lỗi</h2>
-        <p>${esc(err && err.message ? err.message : err)}</p>
+        <p>${msg}</p>
         <p class="muted">Cô chụp màn hình lỗi này gửi lại để kiểm tra tiếp.</p>
       </section>`;
     }
@@ -51,7 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     function pr(){ return VQTH6.userProgress(u.maHS); }
     function done(m){ return !!pr().missions?.[stationId+'_'+m]; }
     function testInfo(){ return pr().tests?.[stationId] || {attempt:0,best:0,last:0}; }
-    function esc(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
     function isImage(s){ return /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(String(s||'')); }
 
     function youtubeId(url){
