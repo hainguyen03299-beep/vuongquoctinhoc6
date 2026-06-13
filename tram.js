@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  function esc(s){
+    return String(s||'')
+      .replaceAll('&','&amp;')
+      .replaceAll('"','&quot;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;');
+  }
+
   const stationBox = document.getElementById('stationBox');
   const titleEl = document.getElementById('stationTitle');
   const metaEl = document.getElementById('stationMeta');
@@ -6,11 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function showFatal(err){
     console.error(err);
-    const msg = String(err && err.message ? err.message : err || 'Không rõ lỗi')
-      .replaceAll('&','&amp;')
-      .replaceAll('"','&quot;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;');
+    const msg = esc(err && err.message ? err.message : err || 'Không rõ lỗi');
     if(stationBox){
       stationBox.innerHTML = `<section class="panel warn">
         <h2>⚠️ Trang trạm đang lỗi</h2>
@@ -39,24 +43,25 @@ document.addEventListener('DOMContentLoaded', async () => {
       || stations.find(x=>String(x.ma_tram)===String(urlId))
       || stations[0];
 
-    if(titleEl) titleEl.textContent=`${st.icon||st.bieu_tuong||'🏆'} ${st.title||st.ten_tram||'Trạm học'}`;
-    if(metaEl) metaEl.textContent=`${st.semester||st.hoc_ky||''} • ${st.unit||st.chu_de||''} • Đạt ${st.passScore||st.diem_dat||70}% để qua trạm`;
-
-    const VIDEO_REQUIRED_PERCENT = 90;
-    let ytPlayer = null;
-    let videoTimer = null;
-    let watchedSeconds = 0;
-    let lastVideoTime = 0;
-    let videoDuration = 0;
-    let lastSyncedVideoProgress = 0;
-
     const stationId = st.id || st.ma_tram || urlId || '';
     const passScore = Number(st.passScore || st.diem_dat || 70);
+    const minWatchSeconds = Math.max(10, Number(
+      st.minWatchSeconds ||
+      st.thoi_gian_xem_toi_thieu ||
+      st.thoiGianXemToiThieu ||
+      60
+    ));
+
+    let videoTimer = null;
+    let lastTick = 0;
+    let lastSyncedVideoProgress = 0;
+
+    if(titleEl) titleEl.textContent=`${st.icon||st.bieu_tuong||'🏆'} ${st.title||st.ten_tram||'Trạm học'}`;
+    if(metaEl) metaEl.textContent=`${st.semester||st.hoc_ky||''} • ${st.unit||st.chu_de||''} • Đạt ${passScore}% để qua trạm`;
 
     function pr(){ return VQTH6.userProgress(u.maHS); }
     function done(m){ return !!pr().missions?.[stationId+'_'+m]; }
     function testInfo(){ return pr().tests?.[stationId] || {attempt:0,best:0,last:0}; }
-    function esc(s){ return String(s||'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
     function isImage(s){ return /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(String(s||'')); }
 
     function youtubeId(url){
@@ -68,134 +73,122 @@ document.addEventListener('DOMContentLoaded', async () => {
       m=url.match(/youtube\.com\/embed\/([^?&]+)/); if(m) return m[1];
       return '';
     }
-    function youtubeWatchUrl(url){
-      const id=youtubeId(url);
-      return id ? `https://www.youtube.com/watch?v=${id}` : String(url||'');
+
+    function videoSecondsKey(){ return 'vqth6_video_seconds_'+stationId+'_'+u.maHS; }
+    function videoProgressKey(){ return 'vqth6_video_progress_'+stationId+'_'+u.maHS; }
+
+    function getWatchedSeconds(){
+      return Math.max(0, Number(localStorage.getItem(videoSecondsKey()) || 0));
     }
 
-    function videoProgressKey(){ return 'vqth6_video_progress_'+stationId+'_'+u.maHS; }
-    function getVideoProgress(){
-      const local=Number(localStorage.getItem(videoProgressKey())||0);
-      const p=pr();
-      const saved=Number(p.flags?.[stationId+'_videoProgress']||0);
-      return Math.max(local,saved,0);
+    function setWatchedSeconds(sec){
+      sec = Math.max(0, Math.min(minWatchSeconds, Math.floor(Number(sec)||0)));
+      localStorage.setItem(videoSecondsKey(), String(sec));
+      const percent = Math.min(100, Math.floor(sec / minWatchSeconds * 100));
+      localStorage.setItem(videoProgressKey(), String(percent));
+
+      const p = pr();
+      p.flags = p.flags || {};
+      p.flags[stationId+'_videoProgress'] = percent;
+      p.flags[stationId+'_videoSeconds'] = sec;
+      if(VQTH6.saveUserProgress) VQTH6.saveUserProgress(p);
+
+      updateVideoProgressUi(sec);
+
+      if(VQTH6.API_URL && (percent >= 100 || percent - lastSyncedVideoProgress >= 10)){
+        lastSyncedVideoProgress = percent;
+        VQTH6.api('updateVideoProgress', {
+          maHS:u.maHS,
+          stationId:stationId,
+          percent:percent,
+          silent:true
+        }, {silent:true}).then(res=>{
+          if(res.progress && VQTH6.saveUserProgress) VQTH6.saveUserProgress(res.progress);
+        }).catch(()=>{});
+      }
     }
-    function updateVideoProgressUi(percent){
-      percent=Math.max(0,Math.min(100,Math.floor(Number(percent)||0)));
+
+    function getVideoProgress(){
+      const local = Number(localStorage.getItem(videoProgressKey()) || 0);
+      const p = pr();
+      const saved = Number(p.flags?.[stationId+'_videoProgress'] || 0);
+      return Math.max(local, saved, 0);
+    }
+
+    function fmtTime(sec){
+      sec = Math.max(0, Math.floor(Number(sec)||0));
+      const m = Math.floor(sec/60);
+      const s = sec%60;
+      return m>0 ? `${m}:${String(s).padStart(2,'0')}` : `${s}s`;
+    }
+
+    function updateVideoProgressUi(sec){
+      sec = Math.max(getWatchedSeconds(), Number(sec)||0);
+      const percent = Math.min(100, Math.floor(sec / minWatchSeconds * 100));
       const bar=document.getElementById('ytProgressBar');
       const text=document.getElementById('ytProgressText');
       const hint=document.getElementById('videoWatchHint');
+      const time=document.getElementById('videoTimeText');
       const btn=document.querySelector('[data-m="video"]');
+
       if(bar) bar.style.width=percent+'%';
       if(text) text.textContent=percent+'%';
+      if(time) time.textContent=`${fmtTime(sec)} / ${fmtTime(minWatchSeconds)}`;
+
       if(hint){
-        if(percent>=VIDEO_REQUIRED_PERCENT){
+        if(percent>=100){
           hint.className='ok';
-          hint.textContent='✅ Đã xem đủ '+VIDEO_REQUIRED_PERCENT+'%. Em có thể nhận XP.';
+          hint.textContent='✅ Đã xem đủ thời gian. Em có thể nhận XP.';
         }else{
           hint.className='warn';
-          hint.textContent='⏳ Đã xem '+percent+'%. Cần đạt '+VIDEO_REQUIRED_PERCENT+'% để nhận XP.';
+          hint.textContent='⏳ Hãy giữ video đang mở đến khi đủ thời gian xem tối thiểu.';
         }
       }
+
       if(btn && !done('video')){
-        btn.disabled = percent < VIDEO_REQUIRED_PERCENT;
-        btn.textContent = percent >= VIDEO_REQUIRED_PERCENT ? '+10 XP' : '🔒 Xem đủ 90% để nhận XP';
-      }
-    }
-    function saveVideoProgress(percent, sync=false){
-      percent=Math.max(0,Math.min(100,Math.floor(Number(percent)||0)));
-      const old=getVideoProgress();
-      if(percent<old) percent=old;
-      localStorage.setItem(videoProgressKey(),String(percent));
-
-      const p=pr();
-      p.flags=p.flags||{};
-      p.flags[stationId+'_videoProgress']=percent;
-      if(VQTH6.saveUserProgress) VQTH6.saveUserProgress(p);
-
-      updateVideoProgressUi(percent);
-
-      if(VQTH6.API_URL && (sync || percent>=90 || percent-lastSyncedVideoProgress>=5)){
-        lastSyncedVideoProgress=percent;
-        VQTH6.api('updateVideoProgress',{maHS:u.maHS,stationId,percent,silent:true},{silent:true})
-          .then(res=>{ if(res.progress && VQTH6.saveUserProgress) VQTH6.saveUserProgress(res.progress); })
-          .catch(()=>{});
+        btn.disabled = percent < 100;
+        btn.textContent = percent >= 100 ? '+10 XP' : '🔒 Chưa đủ thời gian xem';
       }
     }
 
-    function loadYoutubeApi(){
-      if(window.YT && window.YT.Player) return Promise.resolve();
-      if(window.__vqth6YTReadyPromise) return window.__vqth6YTReadyPromise;
-      window.__vqth6YTReadyPromise = new Promise(resolve=>{
-        const old = window.onYouTubeIframeAPIReady;
-        window.onYouTubeIframeAPIReady = function(){
-          if(typeof old==='function') old();
-          resolve();
-        };
-        const tag=document.createElement('script');
-        tag.src='https://www.youtube.com/iframe_api';
-        document.head.appendChild(tag);
-      });
-      return window.__vqth6YTReadyPromise;
+    function startVideoTimer(){
+      if(done('video')) return;
+      clearInterval(videoTimer);
+      lastTick = Date.now();
+      updateVideoProgressUi(getWatchedSeconds());
+
+      videoTimer = setInterval(()=>{
+        const box = document.getElementById('videoContent');
+        if(!box || box.classList.contains('hidden')){
+          clearInterval(videoTimer);
+          return;
+        }
+        const now = Date.now();
+        const delta = Math.max(0, Math.floor((now-lastTick)/1000));
+        lastTick = now;
+        if(delta>0){
+          setWatchedSeconds(getWatchedSeconds()+delta);
+        }
+      }, 1000);
     }
 
-    function initYoutubeTracking(videoId){
-      loadYoutubeApi().then(()=>{
-        const saved=getVideoProgress();
-        updateVideoProgressUi(saved);
-        const box=document.getElementById('ytPlayer');
-        if(!box) return;
-        box.innerHTML='';
-        ytPlayer = new YT.Player('ytPlayer',{
-          videoId,
-         playerVars:{
-  rel:0,
-  modestbranding:1,
-  playsinline:1,
-  enablejsapi:1
-},
-          events:{
-            onReady(e){
-              try{
-                videoDuration=e.target.getDuration()||0;
-                watchedSeconds=Math.max(watchedSeconds, videoDuration*(saved/100));
-                updateVideoProgressUi(saved);
-              }catch(err){}
-            },
-            onStateChange(e){
-              if(e.data===YT.PlayerState.PLAYING) startWatchLoop();
-              else stopWatchLoop();
-            }
-          }
-        });
-      });
-    }
-
-    function startWatchLoop(){
+    function stopVideoTimer(){
       clearInterval(videoTimer);
-      try{
-        lastVideoTime=ytPlayer.getCurrentTime()||0;
-        videoDuration=ytPlayer.getDuration()||videoDuration||0;
-      }catch(e){}
-      videoTimer=setInterval(()=>{
-        try{
-          const cur=ytPlayer.getCurrentTime()||0;
-          videoDuration=ytPlayer.getDuration()||videoDuration||0;
-          const delta=cur-lastVideoTime;
-          if(delta>0 && delta<2.5) watchedSeconds+=delta;
-          lastVideoTime=cur;
-          if(videoDuration>0) saveVideoProgress(Math.floor(watchedSeconds/videoDuration*100), false);
-        }catch(e){}
-      },1000);
-    }
-    function stopWatchLoop(){
-      clearInterval(videoTimer);
-      saveVideoProgress(getVideoProgress(), true);
+      const percent = getVideoProgress();
+      if(VQTH6.API_URL && percent>0){
+        VQTH6.api('updateVideoProgress', {
+          maHS:u.maHS,
+          stationId:stationId,
+          percent:percent,
+          silent:true
+        }, {silent:true}).catch(()=>{});
+      }
     }
 
     function playSound(file, vol=.75){
       try{ const a=new Audio(file); a.volume=vol; a.play().catch(()=>{}); }catch(e){}
     }
+
     function showXpGain(xp){
       playSound('audio/xp.mp3', .8);
       const el=document.createElement('div');
@@ -207,13 +200,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function mark(m, extra={}){
-      if(m==='video' && getVideoProgress()<VIDEO_REQUIRED_PERCENT){
-        alert('Em cần xem video đạt ít nhất '+VIDEO_REQUIRED_PERCENT+'% mới nhận được XP.');
-        updateVideoProgressUi(getVideoProgress());
+      if(m==='video' && getVideoProgress()<100){
+        alert('Em cần xem đủ thời gian tối thiểu mới nhận được XP.');
+        updateVideoProgressUi(getWatchedSeconds());
         return;
       }
+
       const before=Number(pr().xp||0);
-      await VQTH6.markMission(stationId, m, {...extra, videoProgress:getVideoProgress()});
+      await VQTH6.markMission(stationId, m, {
+        ...extra,
+        videoProgress:getVideoProgress(),
+        watchedSeconds:getWatchedSeconds(),
+        minWatchSeconds:minWatchSeconds
+      });
       const after=Number(pr().xp||0);
       showXpGain(Math.max(0,after-before) || (m==='video'?10:m==='summary'?10:20));
       setTimeout(renderStation,700);
@@ -223,6 +222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const p=pr(), tests=p.tests||{};
       return stations.filter(s=>Number(tests[(s.id||s.ma_tram)]?.best||0)>=Number(s.passScore||s.diem_dat||70)).length;
     }
+
     function xpPercent(xp){ return Math.min(100,Math.round((Number(xp||0)%500)/500*100)); }
 
     function studentHud(){
@@ -268,24 +268,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     function videoHtml(){
       const videoUrl=st.videoUrl||st.video_url||'';
       const id=youtubeId(videoUrl);
+      const watched=getWatchedSeconds();
+      const percent=Math.min(100, Math.floor(watched/minWatchSeconds*100));
+
+      let frame = '';
       if(id){
-        const saved=getVideoProgress();
-        setTimeout(()=>initYoutubeTracking(id),300);
-        return `<div class="video-progress-card">
-          <div class="video-progress-head">
-            <b>🎬 Tiến độ xem video</b>
-            <strong id="ytProgressText">${saved}%</strong>
-          </div>
-          <div class="yt-progress"><span id="ytProgressBar" style="width:${saved}%"></span></div>
-          <p id="videoWatchHint" class="${saved>=90?'ok':'warn'}">${saved>=90?'✅ Đã xem đủ 90%. Em có thể nhận XP.':'⏳ Đã xem '+saved+'%. Cần đạt 90% để nhận XP.'}</p>
-          <p class="muted">Lưu ý: Học sinh cần xem video ngay trong khung bên dưới để hệ thống đếm tiến độ.</p>
+        frame = `<iframe
+          src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1"
+          title="Video bài học"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"></iframe>`;
+      }else if(/\.(mp4|webm|ogg)(\?|#|$)/i.test(videoUrl)){
+        frame = `<video controls src="${esc(videoUrl)}"></video>`;
+      }else if(videoUrl && videoUrl !== '#'){
+        frame = `<a class="vqth6-auto-link" href="${esc(videoUrl)}" target="_blank">🎥 Mở video</a>`;
+      }else{
+        frame = `<span class="muted">Cô sẽ cập nhật video.</span>`;
+      }
+
+      return `<div class="video-progress-card">
+        <div class="video-progress-head">
+          <b>🎬 Tiến độ xem video</b>
+          <strong id="ytProgressText">${percent}%</strong>
         </div>
-        <div class="video-frame"><div id="ytPlayer"></div></div>`;
-      }
-      if(/\.(mp4|webm|ogg)(\?|#|$)/i.test(videoUrl)){
-        return `<video controls src="${esc(videoUrl)}"></video><p class="warn">Video nội bộ: cô nên dùng YouTube để hệ thống theo dõi % chính xác.</p>`;
-      }
-      return '<span class="muted">Cô sẽ cập nhật video.</span>';
+        <div class="yt-progress"><span id="ytProgressBar" style="width:${percent}%"></span></div>
+        <p id="videoWatchHint" class="${percent>=100?'ok':'warn'}">${percent>=100?'✅ Đã xem đủ thời gian. Em có thể nhận XP.':'⏳ Hãy giữ video đang mở đến khi đủ thời gian xem tối thiểu.'}</p>
+        <p class="muted">⏱️ Thời gian xem: <b id="videoTimeText">${fmtTime(watched)} / ${fmtTime(minWatchSeconds)}</b></p>
+      </div>
+      <div class="video-frame">${frame}</div>`;
     }
 
     function summaryHtml(){
@@ -311,7 +322,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <h2>🎯 Nhiệm vụ trạm</h2>
         <p class="muted">Em bấm vào từng nhiệm vụ để mở nội dung.</p>
         <div class="mission-list">
-          <div class="mission compact-mission"><div class="ico">🎬</div><div><b>Xem video kiến thức</b><p class="muted">Xem đủ 90% video mới nhận XP.</p><button class="btn" data-open="videoContent">🎬 Xem video</button><div id="videoContent" class="reveal-box hidden">${videoHtml()}<div class="quick-actions"><button class="btn good" data-m="video" ${done('video')||getVideoProgress()<90?'disabled':''}>${done('video')?'✅ Đã xem':(getVideoProgress()>=90?'+10 XP':'🔒 Xem đủ 90% để nhận XP')}</button></div></div></div></div>
+          <div class="mission compact-mission"><div class="ico">🎬</div><div><b>Xem video kiến thức</b><p class="muted">Mở video và giữ video đang mở đến khi đủ thời gian xem tối thiểu.</p><button class="btn" data-open="videoContent">🎬 Xem video</button><div id="videoContent" class="reveal-box hidden">${videoHtml()}<div class="quick-actions"><button class="btn good" data-m="video" ${done('video')||getVideoProgress()<100?'disabled':''}>${done('video')?'✅ Đã xem':(getVideoProgress()>=100?'+10 XP':'🔒 Chưa đủ thời gian xem')}</button></div></div></div></div>
           <div class="mission compact-mission"><div class="ico">📘</div><div><b>Tóm tắt bài học</b><p class="muted">Xem tóm tắt sau khi nhận XP video.</p><button class="btn" data-open="summaryContent" ${!done('video')?'disabled':''}>📘 Xem tóm tắt bài học</button><div id="summaryContent" class="reveal-box hidden">${summaryHtml()}<div class="quick-actions"><button class="btn good" data-m="summary" ${!done('video')||done('summary')?'disabled':''}>${done('summary')?'✅ Đã xem':'+10 XP - Đánh dấu đã đọc'}</button></div></div></div></div>
           <div class="mission compact-mission"><div class="ico">📝</div><div><b>Luyện tập</b><p class="muted">Mở sau khi đã xem tóm tắt.</p><a class="btn good ${!done('summary')?'disabled-link':''}" href="${!done('summary')?'#':practiceLink}">${done('practice')?'✅ Đã luyện tập':'📝 Làm luyện tập'}</a></div></div>
           <div class="mission compact-mission"><div class="ico">🏆</div><div><b>Kiểm tra mở khóa</b><p class="muted">Điểm cao nhất: ${t.best||0}% • Số lần: ${t.attempt||0}</p><a class="btn gold ${!done('practice')?'disabled-link':''}" href="${!done('practice')?'#':testLink}">🏆 Làm kiểm tra mở khóa</a></div></div>
@@ -324,17 +335,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(!box) return;
         box.classList.toggle('hidden');
         b.textContent=box.classList.contains('hidden') ? (b.dataset.open==='videoContent'?'🎬 Xem video':'📘 Xem tóm tắt bài học') : '🔼 Thu gọn';
-        if(!box.classList.contains('hidden') && b.dataset.open==='videoContent'){
-          const videoUrl=st.videoUrl||st.video_url||'';
-          const id=youtubeId(videoUrl);
-          if(id) setTimeout(()=>initYoutubeTracking(id),250);
+
+        if(b.dataset.open==='videoContent'){
+          if(box.classList.contains('hidden')) stopVideoTimer();
+          else startVideoTimer();
         }
       });
+
       const thumb=document.getElementById('summaryThumb');
       if(thumb) thumb.onclick=()=>showImageModal(st.summaryImage||st.summary||st.imageUrl||st.image_url);
+
+      updateVideoProgressUi(getWatchedSeconds());
     }
 
     renderStation();
+
+    window.addEventListener('beforeunload', stopVideoTimer);
 
   }catch(err){
     showFatal(err);

@@ -100,7 +100,8 @@ function toStation(r){
     practiceUrl: String(r.luyen_tap_url || ''),
     testUrl: String(r.kiem_tra_url || ''),
     summary: String(r.tom_tat || ''),
-    xp: Number(r.xp || 0)
+    xp: Number(r.xp || 0),
+    minWatchSeconds: Number(r.thoi_gian_xem_toi_thieu || r.thoiGianXemToiThieu || 60)
   };
 }
 
@@ -123,7 +124,8 @@ function fromStation(st){
     image_url: st.imageUrl || st.image_url || '',
     luyen_tap_url: st.practiceUrl || st.luyen_tap_url || '',
     kiem_tra_url: st.testUrl || st.kiem_tra_url || '',
-    tom_tat: st.summary || st.tom_tat || ''
+    tom_tat: st.summary || st.tom_tat || '',
+    thoi_gian_xem_toi_thieu: st.minWatchSeconds || st.thoi_gian_xem_toi_thieu || st.thoiGianXemToiThieu || 60
   };
 }
 
@@ -283,11 +285,7 @@ function markMission(req){
   const maTram = String(req.stationId || req.ma_tram || '').trim();
   const mission = String(req.mission || '').trim();
   const r = getProgressRow(maHS, maTram);
-  if(mission === 'video'){
-    const currentVideo = Math.max(Number(r.tien_do_video || 0), Number((req.extra && req.extra.videoProgress) || 0));
-    if(currentVideo < 90) return {success:false, message:'Chưa xem đủ 90% video nên chưa được nhận XP.'};
-    r.tien_do_video = currentVideo;
-  }
+  if(mission === 'video') r.tien_do_video = Math.max(Number(r.tien_do_video || 0), 100);
   if(mission === 'summary') r.da_xem_tom_tat = true;
   if(mission === 'practice') r.da_luyen_tap = true;
   saveProgressRow(r);

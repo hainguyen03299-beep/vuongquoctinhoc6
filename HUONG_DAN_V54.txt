@@ -1,0 +1,23 @@
+VQTH6 v5.4 - Video theo thời gian xem tối thiểu
+
+Đã sửa:
+- Bỏ đếm % bằng YouTube API.
+- Không còn lỗi postMessage.
+- Dùng cột tramhoc.thoi_gian_xem_toi_thieu (đơn vị giây).
+- HS mở video, hệ thống đếm thời gian video đang mở.
+- Đủ thời gian mới mở nút +10 XP.
+
+Cần chép đè:
+- tram.js
+- style.css
+- APPS_SCRIPT_CODE.gs
+- shared.js
+- api-config.js
+
+Sheet tramhoc cần có cột:
+thoi_gian_xem_toi_thieu
+
+Ví dụ:
+180
+240
+300
