@@ -56,6 +56,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     let lastTick = 0;
     let lastSyncedVideoProgress = 0;
 
+    // YouTube API: chỉ cộng thời gian khi video thật sự đang PHÁT
+    let ytPlayer = null;
+    let ytReady = false;
+    let ytApiPromise = null;
+    let currentVideoId = '';
+
     if(titleEl) titleEl.textContent=`${st.icon||st.bieu_tuong||'🏆'} ${st.title||st.ten_tram||'Trạm học'}`;
     if(metaEl) metaEl.textContent=`${st.semester||st.hoc_ky||''} • ${st.unit||st.chu_de||''} • Đạt ${passScore}% để qua trạm`;
 
@@ -171,9 +177,34 @@ document.addEventListener('DOMContentLoaded', async () => {
           clearInterval(videoTimer);
           return;
         }
+
+        const videoUrl = st.videoUrl || st.video_url || '';
+        const id = youtubeId(videoUrl);
+
+        // Với YouTube: chỉ đếm khi player đã sẵn sàng và đang PLAYING
+        if(id){
+          if(!ytPlayer || !ytReady || typeof ytPlayer.getPlayerState !== 'function'){
+            lastTick = Date.now();
+            return;
+          }
+
+          if(ytPlayer.getPlayerState() !== YT.PlayerState.PLAYING){
+            lastTick = Date.now();
+            return;
+          }
+        }else{
+          // Với video mp4/webm: chỉ đếm khi thẻ video đang chạy
+          const htmlVideo = box.querySelector('video');
+          if(htmlVideo && (htmlVideo.paused || htmlVideo.ended)){
+            lastTick = Date.now();
+            return;
+          }
+        }
+
         const now = Date.now();
         const delta = Math.max(0, Math.floor((now-lastTick)/1000));
         lastTick = now;
+
         if(delta>0){
           setWatchedSeconds(getWatchedSeconds()+delta);
         }
@@ -191,6 +222,63 @@ document.addEventListener('DOMContentLoaded', async () => {
           silent:true
         }, {silent:true}).catch(()=>{});
       }
+    }
+
+    function loadYoutubeApi(){
+      if(window.YT && window.YT.Player) return Promise.resolve();
+      if(ytApiPromise) return ytApiPromise;
+
+      ytApiPromise = new Promise(resolve=>{
+        const oldReady = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function(){
+          if(typeof oldReady === 'function') oldReady();
+          resolve();
+        };
+
+        if(!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')){
+          const tag = document.createElement('script');
+          tag.src = 'https://www.youtube.com/iframe_api';
+          document.head.appendChild(tag);
+        }
+      });
+
+      return ytApiPromise;
+    }
+
+    async function initYoutubePlayer(videoId){
+      if(!videoId) return;
+      const holder = document.getElementById('ytPlayer');
+      if(!holder) return;
+
+      if(ytPlayer && currentVideoId === videoId) return;
+
+      currentVideoId = videoId;
+      ytReady = false;
+
+      await loadYoutubeApi();
+
+      holder.innerHTML = '';
+      ytPlayer = new YT.Player('ytPlayer', {
+        videoId: videoId,
+        playerVars:{
+          rel:0,
+          modestbranding:1,
+          playsinline:1
+        },
+        events:{
+          onReady(){
+            ytReady = true;
+            updateVideoProgressUi(getWatchedSeconds());
+          },
+          onStateChange(event){
+            if(event.data === YT.PlayerState.PLAYING){
+              startVideoTimer();
+            }else{
+              stopVideoTimer();
+            }
+          }
+        }
+      });
     }
 
     function playSound(file, vol=.75){
@@ -281,12 +369,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       let frame = '';
       if(id){
-        frame = `<iframe
-          src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1"
-          title="Video bài học"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          loading="lazy"></iframe>`;
+        frame = `<div id="ytPlayer" class="yt-player-box"></div>`;
       }else if(/\.(mp4|webm|ogg)(\?|#|$)/i.test(videoUrl)){
         frame = `<video controls src="${esc(videoUrl)}"></video>`;
       }else if(videoUrl && videoUrl !== '#'){
@@ -330,7 +413,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <h2>🎯 Nhiệm vụ trạm</h2>
         <p class="muted">Em bấm vào từng nhiệm vụ để mở nội dung.</p>
         <div class="mission-list">
-          <div class="mission compact-mission"><div class="ico">🎬</div><div><b>Xem video kiến thức</b><p class="muted">Mở video và giữ video đang mở đến khi đủ thời gian xem tối thiểu.</p><button class="btn" data-open="videoContent">🎬 Xem video</button><div id="videoContent" class="reveal-box hidden">${videoHtml()}<div class="quick-actions"><button class="btn good" data-m="video" ${done('video')||getVideoProgress()<100?'disabled':''}>${done('video')?'✅ Đã xem':(getVideoProgress()>=100?'+10 XP':'🔒 Chưa đủ thời gian xem')}</button></div></div></div></div>
+          <div class="mission compact-mission"><div class="ico">🎬</div><div><b>Xem video kiến thức</b><p class="muted">Mở video và giữ video đang mở đến khi đủ thời gian xem tối thiểu.</p><button class="btn" data-open="videoContent">🎬 Xem video</button><div id="videoContent" class="reveal-box hidden">${videoHtml()}<div class="quick-actions"><button class="btn good" data-m="video" ${done('video')?'disabled':''}>${done('video')?'✅ Đã xem':(getVideoProgress()>=100?'🎁 Nhận 10 XP':'🔒 Chưa đủ thời gian xem')}</button></div></div></div></div>
           <div class="mission compact-mission"><div class="ico">📘</div><div><b>Tóm tắt bài học</b><p class="muted">Xem tóm tắt sau khi nhận XP video.</p><button class="btn" data-open="summaryContent" ${!done('video')?'disabled':''}>📘 Xem tóm tắt bài học</button><div id="summaryContent" class="reveal-box hidden">${summaryHtml()}<div class="quick-actions"><button class="btn good" data-m="summary" ${!done('video')||done('summary')?'disabled':''}>${done('summary')?'✅ Đã xem':'+10 XP - Đánh dấu đã đọc'}</button></div></div></div></div>
           <div class="mission compact-mission"><div class="ico">📝</div><div><b>Luyện tập</b><p class="muted">Mở sau khi đã xem tóm tắt.</p><a class="btn good ${!done('summary')?'disabled-link':''}" href="${!done('summary')?'#':practiceLink}">${done('practice')?'✅ Đã luyện tập':'📝 Làm luyện tập'}</a></div></div>
           <div class="mission compact-mission"><div class="ico">🏆</div><div><b>Kiểm tra mở khóa</b><p class="muted">Điểm cao nhất: ${t.best||0}% • Số lần: ${t.attempt||0}</p><a class="btn gold ${!done('practice')?'disabled-link':''}" href="${!done('practice')?'#':testLink}">🏆 Làm kiểm tra mở khóa</a></div></div>
@@ -345,18 +428,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         b.textContent=box.classList.contains('hidden') ? (b.dataset.open==='videoContent'?'🎬 Xem video':'📘 Xem tóm tắt bài học') : '🔼 Thu gọn';
 
         if(b.dataset.open==='videoContent'){
-          if(box.classList.contains('hidden')) stopVideoTimer();
-          else startVideoTimer();
+          if(box.classList.contains('hidden')){
+            stopVideoTimer();
+          }else{
+            const videoUrl = st.videoUrl || st.video_url || '';
+            const id = youtubeId(videoUrl);
+
+            if(id){
+              initYoutubePlayer(id);
+            }else{
+              startVideoTimer();
+            }
+          }
         }
       });
 
       const thumb=document.getElementById('summaryThumb');
       if(thumb) thumb.onclick=()=>showImageModal(st.summaryImage||st.summary||st.imageUrl||st.image_url);
 
+      const htmlVideo = document.querySelector('#videoContent video');
+      if(htmlVideo){
+        htmlVideo.onplay = startVideoTimer;
+        htmlVideo.onpause = stopVideoTimer;
+        htmlVideo.onended = stopVideoTimer;
+      }
+
       updateVideoProgressUi(getWatchedSeconds());
     }
 
     renderStation();
+
+    if(!document.getElementById('ytPlayerFixStyle')){
+      const style = document.createElement('style');
+      style.id = 'ytPlayerFixStyle';
+      style.textContent = '#ytPlayer,.yt-player-box{width:100%;min-height:360px;border-radius:18px;overflow:hidden} #ytPlayer iframe{width:100%;min-height:360px;border:0;border-radius:18px}';
+      document.head.appendChild(style);
+    }
 
     window.addEventListener('beforeunload', stopVideoTimer);
 
