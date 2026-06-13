@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderStation();
 
-    renderStation();
+ 
 
 setTimeout(()=>{
    startVideoTimer();
