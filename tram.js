@@ -255,6 +255,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       </section>`;
     }
 
+   playerVars:{
+  rel:0,
+  modestbranding:1,
+  playsinline:1,
+  enablejsapi:1,
+  origin: window.location.origin
+}
     function videoHtml(){
       const videoUrl=st.videoUrl||st.video_url||'';
       const id=youtubeId(videoUrl);
@@ -330,3 +337,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     showFatal(err);
   }
 });
+
