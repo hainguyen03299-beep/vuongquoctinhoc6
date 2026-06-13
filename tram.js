@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         box.innerHTML='';
         ytPlayer = new YT.Player('ytPlayer',{
           videoId,
-          playerVars:{rel:0,modestbranding:1,playsinline:1,enablejsapi:1},
+          playerVars:{rel:0,modestbranding:1,playsinline:1,enablejsapi:1,origin:window.location.origin},
           events:{
             onReady(e){
               try{
@@ -174,7 +174,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           const delta=cur-lastVideoTime;
           if(delta>0 && delta<2.5) watchedSeconds+=delta;
           lastVideoTime=cur;
-          if(videoDuration>0) saveVideoProgress(Math.floor(watchedSeconds/videoDuration*100), false);
+          if(videoDuration>0){
+            const pct=Math.floor(watchedSeconds/videoDuration*100);
+            console.log('YT progress:', Math.floor(watchedSeconds), '/', Math.floor(videoDuration), '=', pct+'%');
+            saveVideoProgress(pct, false);
+          }
         }catch(e){}
       },1000);
     }
@@ -254,14 +258,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </section>`;
     }
-
-   playerVars:{
-  rel:0,
-  modestbranding:1,
-  playsinline:1,
-  enablejsapi:1,
-  origin: window.location.origin
-}
     function videoHtml(){
       const videoUrl=st.videoUrl||st.video_url||'';
       const id=youtubeId(videoUrl);
@@ -337,4 +333,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     showFatal(err);
   }
 });
-
