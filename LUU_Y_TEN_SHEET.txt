@@ -1,0 +1,10 @@
+Đã sửa tên sheet học sinh từ hoc_sinh thành hocsinh.
+
+Các sheet hệ thống đang dùng:
+- hocsinh
+- tramhoc
+- cauhoi
+- tien_do
+- cau_hinh
+
+Chỉ cần thay file APPS_SCRIPT_CODE.gs trong Apps Script rồi Deploy lại.

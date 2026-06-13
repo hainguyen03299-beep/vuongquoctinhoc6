@@ -1,0 +1,1635 @@
+:root{--bg:#061225;--card:#0f1b3d;--line:rgba(255,255,255,.16);--text:#f8fbff;--muted:#cbd5e1;--gold:#ffd54f;--cyan:#00e5ff;--green:#22c55e;--red:#ef4444;--violet:#8b5cf6}*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 8%,rgba(0,229,255,.25),transparent 30%),radial-gradient(circle at 88% 18%,rgba(139,92,246,.25),transparent 33%),linear-gradient(180deg,#050816,#07152e 50%,#040712);min-height:100vh}.page{width:min(1160px,100%);margin:auto;padding:18px 14px 42px}.topbar{display:grid;grid-template-columns:150px 1fr 150px;gap:12px;align-items:center;margin-bottom:16px}.top-btn,.btn{border:2px solid rgba(255,255,255,.85);border-radius:999px;padding:11px 16px;background:linear-gradient(145deg,#2563eb,#7c3aed);color:white;font-weight:900;text-decoration:none;cursor:pointer;text-align:center;box-shadow:0 0 16px rgba(0,229,255,.45);font-family:inherit}.btn.danger{background:linear-gradient(145deg,#ef4444,#b91c1c)}.btn.good{background:linear-gradient(145deg,#22c55e,#15803d)}.btn.gold{background:linear-gradient(145deg,#f59e0b,#b45309)}.btn.gray{background:linear-gradient(145deg,#64748b,#334155)}button:disabled{opacity:.55;cursor:not-allowed}.card,.hero,.panel{background:linear-gradient(145deg,rgba(15,23,42,.9),rgba(37,99,235,.45));border:3px solid rgba(255,255,255,.72);border-radius:24px;box-shadow:0 0 22px rgba(0,229,255,.28),inset 0 0 24px rgba(255,255,255,.08);padding:18px}.hero{text-align:center;margin-bottom:18px}.hero h1{margin:0 0 8px;color:var(--gold);font-size:clamp(32px,5vw,58px);text-shadow:0 3px 0 #7c2d12,0 0 18px #ffd54f;text-transform:uppercase}.muted{color:var(--muted)}.student-card{text-align:center}.student-name{font-weight:1000;color:#fff7b0;font-size:20px}.student-meta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px;font-weight:800;font-size:14px}.grid{display:grid;gap:14px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}.hidden{display:none!important}.nav-card{display:block;text-decoration:none;color:white;min-height:140px}.nav-card b{font-size:24px;color:#fff7b0}.quest-list{display:grid;gap:14px}.quest-section h2{color:#fff7b0}.station-card{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;padding:14px;border-radius:22px;border:2px solid var(--line);background:rgba(15,23,42,.74);text-decoration:none;color:white;position:relative;overflow:hidden}.station-card.current{border-color:#ffd54f;box-shadow:0 0 24px rgba(255,213,79,.38)}.station-card.done{border-color:#22c55e}.station-card.locked{filter:grayscale(.65) brightness(.75)}.station-icon{width:62px;height:62px;border-radius:20px;border:3px solid white;display:grid;place-items:center;font-size:32px;background:linear-gradient(145deg,#38bdf8,#7c3aed);box-shadow:0 7px 0 rgba(0,0,0,.25),0 0 18px rgba(0,229,255,.5)}.station-card.done .station-icon{background:linear-gradient(145deg,#22c55e,#16a34a)}.station-card.locked .station-icon{background:linear-gradient(145deg,#64748b,#0f172a)}.station-title{font-size:22px;font-weight:1000;color:#fff7b0}.progressbar{height:16px;background:rgba(255,255,255,.14);border-radius:999px;overflow:hidden;border:1px solid var(--line)}.progressbar>span{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#00e5ff,#ffd54f);width:0}.status-pill{border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.1);font-weight:900}.mission-list{display:grid;gap:12px}.mission{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;background:rgba(255,255,255,.08);border:2px solid var(--line);border-radius:18px;padding:12px}.mission .ico{font-size:30px}.question{padding:14px;border-radius:18px;background:rgba(15,23,42,.78);border:2px solid var(--line);margin:12px 0}.choice{display:block;margin:8px 0;padding:10px;border-radius:14px;background:rgba(255,255,255,.08);cursor:pointer}.input, input, textarea, select{width:100%;padding:12px 13px;border-radius:14px;border:2px solid rgba(255,255,255,.7);font:inherit;font-weight:700;color:#172554}textarea{min-height:105px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tab{border:2px solid var(--line);background:rgba(255,255,255,.08);color:white;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer}.tab.active{background:linear-gradient(145deg,#f59e0b,#7c3aed);border-color:white}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}.badge{display:inline-block;border-radius:999px;padding:5px 9px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-weight:900}.music-toggle{position:fixed;right:14px;top:14px;z-index:9999;width:54px;height:54px;border-radius:50%;border:3px solid white;background:linear-gradient(145deg,#2563eb,#7c3aed);color:white;font-size:25px;box-shadow:0 0 18px #00e5ff;cursor:pointer}.login-page{min-height:100vh;display:grid;place-items:center;padding:16px}.login-card{width:min(450px,94vw);text-align:center}.warn{background:rgba(239,68,68,.18);border:2px solid rgba(239,68,68,.55);border-radius:18px;padding:12px}.ok{background:rgba(34,197,94,.18);border:2px solid rgba(34,197,94,.55);border-radius:18px;padding:12px}.quick-actions{display:flex;gap:8px;flex-wrap:wrap}.drag-box,.match-box{display:grid;gap:8px}.drag-item,.match-item{padding:10px;background:rgba(255,255,255,.09);border:1px solid var(--line);border-radius:12px}@media(max-width:760px){.topbar{grid-template-columns:1fr}.grid-2,.grid-3,.grid-4,.form-grid{grid-template-columns:1fr}.station-card{grid-template-columns:58px 1fr}.station-card .status-pill{grid-column:1/-1}.station-icon{width:52px;height:52px;font-size:26px}.station-title{font-size:19px}.page{padding-top:72px}.music-toggle{right:10px;top:10px}}
+
+
+/* =====================================================
+   TRANG INDEX DÙNG ẢNH NỀN + ẢNH NÚT TRONG THƯ MỤC images
+   Cần có:
+   images/home-cover.png
+   images/btn-start.png
+   images/btn-map.png
+   images/btn-rank.png
+   images/btn-badge.png
+   images/btn-product.png
+   images/btn-music.png
+   images/btn-music-off.png
+===================================================== */
+body.home-page{
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:#050816;
+}
+.home-screen{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+        radial-gradient(circle at 20% 8%, rgba(0,229,255,.24), transparent 28%),
+        radial-gradient(circle at 80% 25%, rgba(124,58,237,.24), transparent 32%),
+        linear-gradient(180deg,#050816,#07122d 55%,#040712);
+}
+.home-stage{
+    position:relative;
+    width:min(100vw, calc(100vh * 16 / 9));
+    aspect-ratio:16 / 9;
+    overflow:visible;
+}
+.home-bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    user-select:none;
+    pointer-events:none;
+    filter:saturate(1.08) contrast(1.03) brightness(.98);
+}
+.home-stars{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:16;
+    mix-blend-mode:screen;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,.95) 0 1.5px, transparent 2.8px),
+        radial-gradient(circle, rgba(0,229,255,.9) 0 1.7px, transparent 3px),
+        radial-gradient(circle, rgba(255,213,79,.9) 0 1.6px, transparent 3px);
+    background-size:130px 130px,190px 190px,270px 270px;
+    animation:homeStarBlink 3s ease-in-out infinite;
+    opacity:.48;
+}
+.home-glow{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:58%;
+    aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    z-index:13;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(0,229,255,.28), rgba(124,58,237,.15) 45%, transparent 70%);
+    filter:blur(14px);
+    animation:homeGlowPulse 4s ease-in-out infinite;
+}
+
+/* LỚP 2: LOGO TRUNG TÂM VƯƠNG QUỐC TIN HỌC 6 */
+.main-logo{
+    position:absolute;
+    left:50%;
+    top:42%;
+    width:60%;
+    max-width:720px;
+    transform:translate(-50%,-50%);
+    z-index:15;
+    pointer-events:none;
+    user-select:none;
+    animation:mainLogoFloat 4s ease-in-out infinite;
+    filter:
+        drop-shadow(0 0 12px #00e5ff)
+        drop-shadow(0 0 28px #2563eb)
+        drop-shadow(0 0 45px #7dd3fc);
+}
+.logo-glow{
+    position:absolute;
+    left:50%;
+    top:42%;
+    width:62%;
+    aspect-ratio:16 / 9;
+    transform:translate(-50%,-50%);
+    z-index:14;
+    pointer-events:none;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            from 0deg,
+            transparent,
+            rgba(0,229,255,.75),
+            rgba(125,211,252,.7),
+            transparent,
+            rgba(37,99,235,.65),
+            transparent
+        );
+    filter:blur(18px);
+    opacity:.62;
+    animation:logoGlowSpin 6s linear infinite;
+}
+@keyframes mainLogoFloat{
+    0%,100%{transform:translate(-50%,-50%) rotate(-1deg)}
+    50%{transform:translate(-50%,-54%) rotate(1deg)}
+}
+@keyframes logoGlowSpin{
+    from{transform:translate(-50%,-50%) rotate(0deg)}
+    to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+
+.home-btn{
+    position:absolute;
+    display:block;
+    z-index:20;
+    cursor:pointer;
+    animation:homeBtnFloat 3s ease-in-out infinite;
+    transform-origin:center;
+}
+.home-btn img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    pointer-events:none;
+    transition:transform .25s ease, filter .25s ease;
+}
+.home-btn:hover{
+    z-index:999;
+    animation-play-state:paused;
+}
+.home-btn:hover img{
+    transform:translateY(-12px) scale(1.28);
+    filter:
+        brightness(1.16)
+        saturate(1.25)
+        drop-shadow(0 0 14px #00e5ff)
+        drop-shadow(0 0 26px #7c3aed)
+        drop-shadow(0 0 38px #ffd54f);
+}
+.home-btn.clicked img{
+    transform:translateY(4px) scale(.94)!important;
+    filter:brightness(1.24) drop-shadow(0 0 18px #ffd54f);
+}
+.spark{
+    position:absolute;
+    inset:-24px;
+    pointer-events:none;
+    opacity:0;
+}
+.home-btn:hover .spark{opacity:1}
+.spark::before,
+.spark::after{
+    content:"";
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#fff7b0;
+    box-shadow:0 0 12px #ffd54f,0 0 24px #00e5ff;
+}
+.home-btn:hover .spark::before{left:18%;top:8%;animation:sparkFloat1 1.2s infinite}
+.home-btn:hover .spark::after{right:10%;bottom:10%;animation:sparkFloat2 1.35s infinite}
+
+/* Tọa độ 5 nút theo ảnh trang chủ 16:9 */
+.btn-start{top:30%;left:0%;width:35%;height:24%}
+.btn-map{top:52%;left:0%;width:36%;height:24%}
+.btn-rank{top:76%;left:1%;width:34%;height:23%}
+.btn-badge{top:32%;left:72%;width:35%;height:24%}
+.btn-product{top:63%;left:64%;width:38%;height:25%}
+
+.music-toggle{
+    position:fixed;
+    top:14px;
+    right:14px;
+    z-index:99999;
+    width:64px;
+    height:64px;
+    border:0;
+    border-radius:50%;
+    background:transparent;
+    padding:0;
+    cursor:pointer;
+    box-shadow:none;
+}
+.music-toggle img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    filter:drop-shadow(0 0 12px #00e5ff) drop-shadow(0 0 24px #7c3aed);
+}
+.music-toggle.sound-on img{
+    animation:musicPulse 1.8s ease-in-out infinite;
+    filter:drop-shadow(0 0 14px #00e5ff) drop-shadow(0 0 28px #ffd54f) drop-shadow(0 0 44px #7c3aed);
+}
+
+@keyframes homeBtnFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes homeStarBlink{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:.78;transform:scale(1.02)}}
+@keyframes homeGlowPulse{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.95)}50%{opacity:.85;transform:translate(-50%,-50%) scale(1.05)}}
+@keyframes sparkFloat1{0%{opacity:0;transform:translateY(18px) scale(.5)}50%{opacity:1;transform:translateY(-5px) scale(1)}100%{opacity:0;transform:translateY(-22px) scale(.4)}}
+@keyframes sparkFloat2{0%{opacity:0;transform:translateY(12px) scale(.5)}50%{opacity:1;transform:translateY(-8px) scale(1)}100%{opacity:0;transform:translateY(-25px) scale(.4)}}
+@keyframes musicPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@media(max-width:760px){
+    body.home-page .music-toggle{width:54px;height:54px;right:10px;top:10px}
+}
+
+
+/* Auto ID field */
+.auto-id{
+    background:linear-gradient(135deg,#eef6ff,#f5f9ff);
+    color:#2563eb !important;
+    font-weight:700;
+    border:2px dashed #60a5fa !important;
+    text-align:center;
+    cursor:not-allowed;
+}
+
+.auto-id:focus{
+    outline:none;
+    box-shadow:none;
+}
+
+.auto-id::placeholder{
+    color:#94a3b8;
+}
+/* Sửa lỗi bể khung/tràn chữ trang tram.html */
+.panel,
+.card,
+.hero,
+.question,
+.mission,
+.station-card{
+    max-width:100%;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+.panel{
+    overflow:hidden;
+}
+
+.panel img,
+.card img,
+.question img,
+.mission img{
+    max-width:100%;
+    height:auto;
+    display:block;
+}
+
+.lesson-content,
+.station-content,
+#stationBox,
+#lessonBox,
+#missionBox,
+#questionBox{
+    max-width:100%;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+a{
+    overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+iframe,
+video{
+    max-width:100%;
+    width:100%;
+    border-radius:18px;
+}
+
+@media(max-width:760px){
+    .page{
+        width:100%;
+        padding-left:10px;
+        padding-right:10px;
+    }
+
+    .panel,
+    .card,
+    .hero{
+        padding:14px;
+        border-radius:18px;
+    }
+
+    h1{
+        font-size:28px;
+        line-height:1.15;
+    }
+
+    h2{
+        font-size:22px;
+        line-height:1.2;
+    }
+
+    .mission{
+        grid-template-columns:42px 1fr;
+    }
+
+    .mission > *:last-child{
+        grid-column:1 / -1;
+    }
+}
+
+
+/* ===== Nâng cấp bài học: video, ảnh tóm tắt, bài tập 4 vòng ===== */
+.auto-id{
+    background:linear-gradient(135deg,#eef6ff,#f5f9ff);
+    color:#2563eb!important;
+    font-weight:700;
+    border:2px dashed #60a5fa!important;
+    text-align:center;
+    cursor:not-allowed;
+}
+.video-frame{
+    width:100%;
+    max-width:780px;
+    aspect-ratio:16/9;
+    border-radius:20px;
+    overflow:hidden;
+    border:3px solid rgba(255,255,255,.72);
+    box-shadow:0 0 22px rgba(0,229,255,.35);
+    margin-top:10px;
+}
+.video-frame iframe{width:100%;height:100%;border:0;display:block}
+.summary-thumb{
+    position:relative;
+    width:min(360px,100%);
+    border-radius:20px;
+    overflow:hidden;
+    border:3px solid rgba(255,255,255,.78);
+    box-shadow:0 0 18px rgba(255,213,79,.35);
+    cursor:zoom-in;
+    margin-top:10px;
+    background:rgba(255,255,255,.08);
+}
+.summary-thumb img{width:100%;display:block;height:auto}
+.summary-hint{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    padding:10px;
+    text-align:center;
+    font-weight:900;
+    background:linear-gradient(0deg,rgba(2,6,23,.86),rgba(2,6,23,.25));
+    color:#fff7b0;
+}
+.image-modal{
+    position:fixed;
+    inset:0;
+    z-index:100000;
+    background:rgba(2,6,23,.88);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    cursor:zoom-out;
+}
+.image-modal img{
+    max-width:96vw;
+    max-height:88vh;
+    border-radius:18px;
+    border:4px solid white;
+    box-shadow:0 0 35px rgba(0,229,255,.65);
+}
+.image-close{
+    position:fixed;
+    top:16px;
+    right:16px;
+    z-index:100001;
+    border:2px solid white;
+    border-radius:999px;
+    padding:10px 16px;
+    font-weight:900;
+    color:white;
+    background:linear-gradient(145deg,#ef4444,#7f1d1d);
+    cursor:pointer;
+}
+.disabled-link{
+    opacity:.55;
+    pointer-events:none;
+    filter:grayscale(.5);
+}
+.round-progress{
+    display:inline-block;
+    padding:8px 14px;
+    border-radius:999px;
+    border:2px solid rgba(255,255,255,.7);
+    background:rgba(255,255,255,.12);
+    font-weight:900;
+    color:#fff7b0;
+    margin-bottom:12px;
+}
+.play-question.answer-ok{border-color:#22c55e;box-shadow:0 0 18px rgba(34,197,94,.35)}
+.play-question.answer-wrong{border-color:#ef4444;box-shadow:0 0 18px rgba(239,68,68,.35)}
+.feedback{margin-top:10px;padding:10px;border-radius:14px;background:rgba(255,255,255,.1);font-weight:800}
+.drag-classify-row{
+    display:grid;
+    grid-template-columns:1fr minmax(180px,280px);
+    gap:10px;
+    align-items:center;
+    margin:8px 0;
+    padding:10px;
+    border-radius:14px;
+    background:rgba(255,255,255,.08);
+}
+.drag-classify-row span{font-weight:900;color:#fff7b0}
+.panel,.card,.mission,.question{overflow-wrap:anywhere;word-break:break-word}
+a{overflow-wrap:anywhere;word-break:break-word}
+@media(max-width:760px){
+    .drag-classify-row{grid-template-columns:1fr}
+    .video-frame{max-width:100%}
+}
+
+/* ===== Trang trạm gọn: thanh HS + nút mở nội dung ===== */
+.student-hud{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:14px;
+    padding:14px;
+    background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(14,165,233,.36));
+}
+.hud-item{
+    border:2px solid rgba(255,255,255,.3);
+    border-radius:18px;
+    padding:10px;
+    background:rgba(255,255,255,.09);
+    text-align:center;
+    min-height:72px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+}
+.hud-item span{
+    color:#cbd5e1;
+    font-size:13px;
+    font-weight:800;
+}
+.hud-item b{
+    color:#fff7b0;
+    font-size:17px;
+    overflow-wrap:anywhere;
+}
+.station-mission-panel .mission-list{
+    gap:16px;
+}
+.compact-mission{
+    align-items:flex-start;
+}
+.compact-mission .btn{
+    margin-top:8px;
+    display:inline-block;
+}
+.reveal-box{
+    margin-top:12px;
+    padding:14px;
+    border-radius:18px;
+    border:2px dashed rgba(255,255,255,.45);
+    background:rgba(2,6,23,.28);
+    max-width:100%;
+}
+.reveal-box .quick-actions{
+    margin-top:12px;
+}
+@media(max-width:980px){
+    .student-hud{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media(max-width:560px){
+    .student-hud{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .hud-item{min-height:64px;padding:8px;}
+}
+
+
+/* =====================================================
+   TRẠM HỌC GỌN + HUD GAME PHIÊU LƯU
+===================================================== */
+.adventure-hud{
+    display:grid;
+    grid-template-columns:1.15fr 1fr 1.2fr 1.4fr .9fr;
+    gap:14px;
+    align-items:center;
+    background:
+        radial-gradient(circle at 8% 15%,rgba(255,213,79,.22),transparent 28%),
+        linear-gradient(145deg,rgba(15,23,42,.95),rgba(37,99,235,.48));
+}
+
+.hud-main{
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+
+.hud-avatar{
+    width:58px;
+    height:58px;
+    display:grid;
+    place-items:center;
+    border-radius:20px;
+    font-size:32px;
+    border:3px solid #fff;
+    background:linear-gradient(145deg,#facc15,#fb923c);
+    box-shadow:0 6px 0 rgba(0,0,0,.25),0 0 18px rgba(250,204,21,.7);
+}
+
+.hud-name{
+    color:#fff7b0;
+    font-size:19px;
+    font-weight:1000;
+    line-height:1.2;
+}
+
+.hud-class{
+    color:#dbeafe;
+    font-weight:900;
+    margin-top:4px;
+}
+
+.hud-badge-big{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:10px;
+    border-radius:18px;
+    background:rgba(255,255,255,.1);
+    border:2px solid rgba(255,255,255,.24);
+}
+
+.badge-icon{
+    width:50px;
+    height:50px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    font-size:30px;
+    background:linear-gradient(145deg,#fde68a,#f59e0b);
+    box-shadow:0 0 18px rgba(255,213,79,.7);
+}
+
+.hud-badge-big span,
+.hud-line span,
+.hud-score span{
+    display:block;
+    color:#cbd5e1;
+    font-weight:900;
+    font-size:13px;
+}
+
+.hud-badge-big b,
+.hud-line b,
+.hud-score b{
+    color:#fff7b0;
+    font-size:18px;
+    font-weight:1000;
+}
+
+.hud-progress-card{
+    padding:10px;
+    border-radius:18px;
+    background:rgba(255,255,255,.09);
+    border:2px solid rgba(255,255,255,.18);
+}
+
+.hud-line{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    align-items:center;
+    margin-bottom:8px;
+}
+
+.xp-bar,
+.learn-bar{
+    width:100%;
+    height:16px;
+    border-radius:999px;
+    overflow:hidden;
+    background:rgba(15,23,42,.75);
+    border:1px solid rgba(255,255,255,.25);
+}
+
+.xp-bar span{
+    display:block;
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(90deg,#facc15,#f59e0b,#fde68a);
+    box-shadow:0 0 15px rgba(255,213,79,.8);
+    transition:width .45s ease;
+}
+
+.learn-bar span{
+    display:block;
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(90deg,#22c55e,#86efac,#00e5ff);
+    box-shadow:0 0 15px rgba(34,197,94,.75);
+    transition:width .45s ease;
+}
+
+.hud-small{
+    margin-top:6px;
+    color:#dbeafe;
+    font-weight:900;
+    font-size:13px;
+    text-align:right;
+}
+
+.hud-score{
+    padding:12px;
+    border-radius:20px;
+    text-align:center;
+    background:linear-gradient(145deg,rgba(245,158,11,.25),rgba(124,58,237,.25));
+    border:2px solid rgba(255,213,79,.45);
+}
+
+.hud-score b{
+    display:block;
+    font-size:28px;
+    margin-top:4px;
+}
+
+.xp-fly{
+    position:fixed;
+    left:50%;
+    top:42%;
+    z-index:1000001;
+    transform:translate(-50%,20px) scale(.8);
+    opacity:0;
+    padding:14px 24px;
+    border-radius:999px;
+    border:3px solid #fff;
+    background:linear-gradient(145deg,#facc15,#f97316);
+    color:white;
+    font-size:30px;
+    font-weight:1000;
+    text-shadow:0 2px 0 #92400e;
+    box-shadow:0 0 24px rgba(255,213,79,.95),0 0 60px rgba(0,229,255,.45);
+    pointer-events:none;
+}
+
+.xp-fly.show{
+    animation:xpFlyUp 1.1s ease-out forwards;
+}
+
+@keyframes xpFlyUp{
+    0%{opacity:0;transform:translate(-50%,20px) scale(.75)}
+    18%{opacity:1;transform:translate(-50%,0) scale(1.12)}
+    70%{opacity:1;transform:translate(-50%,-52px) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-90px) scale(.85)}
+}
+
+.station-mission-panel h2{
+    color:#fff7b0;
+    text-shadow:0 0 14px rgba(255,213,79,.6);
+}
+
+.compact-mission .btn{
+    margin-top:8px;
+}
+
+.reveal-box{
+    margin-top:14px;
+    padding:14px;
+    border-radius:18px;
+    border:2px dashed rgba(255,255,255,.35);
+    background:rgba(15,23,42,.72);
+}
+
+.video-frame{
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:18px;
+    overflow:hidden;
+    border:3px solid rgba(255,255,255,.65);
+    box-shadow:0 0 24px rgba(0,229,255,.38);
+}
+
+.video-frame iframe{
+    width:100%;
+    height:100%;
+    border:0;
+}
+
+.summary-thumb{
+    position:relative;
+    display:inline-block;
+    max-width:min(420px,100%);
+    cursor:zoom-in;
+    border-radius:20px;
+    overflow:hidden;
+    border:3px solid rgba(255,255,255,.72);
+    box-shadow:0 0 22px rgba(255,213,79,.34);
+}
+
+.summary-thumb img{
+    display:block;
+    width:100%;
+    height:auto;
+}
+
+.summary-hint{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    padding:10px;
+    text-align:center;
+    font-weight:1000;
+    color:white;
+    background:linear-gradient(transparent,rgba(15,23,42,.92));
+}
+
+.image-modal{
+    position:fixed;
+    inset:0;
+    z-index:1000000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:rgba(2,6,23,.84);
+    backdrop-filter:blur(8px);
+}
+
+.image-modal img{
+    max-width:94vw;
+    max-height:88vh;
+    border-radius:22px;
+    border:4px solid white;
+    box-shadow:0 0 34px rgba(0,229,255,.65);
+}
+
+.image-close{
+    position:fixed;
+    right:22px;
+    top:18px;
+    z-index:2;
+    border:2px solid white;
+    border-radius:999px;
+    padding:10px 16px;
+    color:white;
+    background:linear-gradient(145deg,#ef4444,#7f1d1d);
+    font-weight:1000;
+    cursor:pointer;
+}
+
+.disabled-link{
+    opacity:.48;
+    pointer-events:none;
+    filter:grayscale(.7);
+}
+
+@media(max-width:960px){
+    .adventure-hud{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:640px){
+    .adventure-hud{
+        grid-template-columns:1fr;
+    }
+    .hud-score{
+        text-align:left;
+    }
+}
+
+
+/* =====================================================
+   V5.2 - HIỆU ỨNG XP NÂNG CAO
+===================================================== */
+.screen-shake{
+    animation:v52ScreenShake .22s ease-in-out;
+}
+
+@keyframes v52ScreenShake{
+    0%,100%{transform:translate(0,0)}
+    20%{transform:translate(-3px,2px)}
+    40%{transform:translate(3px,-2px)}
+    60%{transform:translate(-2px,-1px)}
+    80%{transform:translate(2px,1px)}
+}
+
+.gold-particles{
+    position:fixed;
+    left:50%;
+    top:43%;
+    z-index:1000000;
+    pointer-events:none;
+}
+
+.gold-particles i{
+    position:absolute;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:radial-gradient(circle,#fff7b0,#facc15 50%,#f97316);
+    box-shadow:0 0 12px #facc15,0 0 24px #fff7b0;
+    transform:translate(-50%,-50%) scale(var(--s));
+    animation:v52GoldBurst .95s ease-out forwards;
+}
+
+@keyframes v52GoldBurst{
+    0%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(.3);
+    }
+    18%{
+        opacity:1;
+    }
+    100%{
+        opacity:0;
+        transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.15);
+    }
+}
+
+.levelup-popup{
+    position:fixed;
+    inset:0;
+    z-index:1000002;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    pointer-events:none;
+    opacity:0;
+    transform:scale(.85);
+    transition:.25s ease;
+}
+
+.levelup-popup.show{
+    opacity:1;
+    transform:scale(1);
+}
+
+.levelup-card{
+    min-width:min(420px,88vw);
+    padding:28px 26px;
+    border-radius:32px;
+    text-align:center;
+    border:5px solid #fff;
+    background:
+        radial-gradient(circle at 50% 0%,rgba(255,255,255,.42),transparent 32%),
+        linear-gradient(145deg,#f59e0b,#f97316 45%,#7c3aed);
+    box-shadow:
+        0 16px 0 rgba(92,38,10,.85),
+        0 0 34px rgba(255,213,79,.95),
+        0 0 90px rgba(0,229,255,.5);
+    animation:v52LevelFloat 1.4s ease-in-out infinite;
+}
+
+.levelup-title{
+    font-size:48px;
+    font-weight:1000;
+    color:#fff7b0;
+    text-shadow:0 4px 0 #92400e,0 0 20px #facc15;
+    letter-spacing:2px;
+}
+
+.levelup-icon{
+    font-size:68px;
+    margin:8px 0;
+    filter:drop-shadow(0 0 18px #facc15);
+    animation:v52StarSpin 1.2s ease-in-out infinite;
+}
+
+.levelup-text{
+    color:white;
+    font-size:22px;
+    font-weight:1000;
+}
+
+@keyframes v52LevelFloat{
+    0%,100%{transform:translateY(0) rotate(-1deg)}
+    50%{transform:translateY(-10px) rotate(1deg)}
+}
+
+@keyframes v52StarSpin{
+    0%,100%{transform:scale(1) rotate(-8deg)}
+    50%{transform:scale(1.15) rotate(8deg)}
+}
+
+.badge-popup{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    z-index:1000002;
+    opacity:0;
+    transform:translateY(30px) scale(.92);
+    transition:.28s ease;
+    pointer-events:none;
+}
+
+.badge-popup.show{
+    opacity:1;
+    transform:translateY(0) scale(1);
+}
+
+.badge-popup-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:min(360px,88vw);
+    padding:16px;
+    border-radius:24px;
+    border:4px solid #fff;
+    background:linear-gradient(145deg,#1d4ed8,#7c3aed 55%,#f59e0b);
+    box-shadow:0 10px 0 rgba(15,23,42,.7),0 0 28px rgba(255,213,79,.75);
+}
+
+.badge-popup-icon{
+    width:70px;
+    height:70px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    font-size:42px;
+    background:linear-gradient(145deg,#fef3c7,#f59e0b);
+    box-shadow:0 0 22px rgba(255,213,79,.9);
+}
+
+.badge-popup-card span{
+    display:block;
+    color:#dbeafe;
+    font-weight:1000;
+    font-size:14px;
+}
+
+.badge-popup-card b{
+    display:block;
+    color:#fff7b0;
+    font-size:22px;
+    font-weight:1000;
+    text-shadow:0 2px 0 #713f12;
+}
+
+/* Thanh XP v5.2 chạy mềm hơn */
+.xp-bar span,
+.learn-bar span{
+    transition:width .9s cubic-bezier(.2,.9,.2,1);
+}
+
+
+/* =====================================================
+   V5.2 - CHỐNG NHẬN XP VIDEO QUÁ NHANH + FALLBACK YOUTUBE
+===================================================== */
+.video-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:10px 0 12px;
+}
+
+.video-note{
+    line-height:1.5;
+}
+
+#videoWatchHint{
+    margin:10px 0 12px;
+    font-weight:900;
+}
+
+
+/* =====================================================
+   V5.3 - THEO DÕI % XEM VIDEO YOUTUBE
+===================================================== */
+.video-progress-card{
+    margin:10px 0 14px;
+    padding:14px;
+    border-radius:20px;
+    border:2px solid rgba(255,255,255,.28);
+    background:rgba(15,23,42,.72);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.06);
+}
+.video-progress-head{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:center;
+    margin-bottom:10px;
+}
+.video-progress-head b{
+    color:#fff7b0;
+    font-size:18px;
+}
+.video-progress-head strong{
+    color:#86efac;
+    font-size:22px;
+    text-shadow:0 0 14px rgba(34,197,94,.75);
+}
+.yt-progress{
+    height:20px;
+    border-radius:999px;
+    overflow:hidden;
+    border:2px solid rgba(255,255,255,.35);
+    background:rgba(2,6,23,.78);
+}
+.yt-progress span{
+    display:block;
+    height:100%;
+    width:0;
+    border-radius:999px;
+    background:linear-gradient(90deg,#22c55e,#86efac,#00e5ff);
+    box-shadow:0 0 18px rgba(34,197,94,.85);
+    transition:width .6s ease;
+}
+#ytPlayer,
+#ytPlayer iframe{
+    width:100%;
+    height:100%;
+}
+
+/* V5.3.1 video progress */
+.video-progress-card{
+  margin:10px 0 14px;
+  padding:14px;
+  border-radius:20px;
+  border:2px solid rgba(255,255,255,.28);
+  background:rgba(15,23,42,.72);
+}
+.video-progress-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:10px;
+}
+.video-progress-head b{color:#fff7b0;font-size:18px}
+.video-progress-head strong{color:#86efac;font-size:22px;text-shadow:0 0 14px rgba(34,197,94,.75)}
+.yt-progress{
+  height:20px;
+  border-radius:999px;
+  overflow:hidden;
+  border:2px solid rgba(255,255,255,.35);
+  background:rgba(2,6,23,.78);
+}
+.yt-progress span{
+  display:block;
+  height:100%;
+  width:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#22c55e,#86efac,#00e5ff);
+  box-shadow:0 0 18px rgba(34,197,94,.85);
+  transition:width .6s ease;
+}
+#ytPlayer,#ytPlayer iframe{width:100%;height:100%}
+.video-actions{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
+
+
+/* Bổ sung an toàn cho trang trạm */
+#ytPlayer,#ytPlayer iframe{
+    width:100%;
+    height:100%;
+}
+.video-frame{
+    min-height:320px;
+}
+
+
+/* =====================================================
+   FIX HUD TRẠM KHÔNG BỂ KHUNG - v5.3.3
+===================================================== */
+.student-hud.adventure-hud,
+.adventure-hud{
+    width:100%;
+    max-width:100%;
+    display:grid;
+    grid-template-columns:
+        minmax(210px,1.35fr)
+        minmax(200px,1.05fr)
+        minmax(190px,1.05fr)
+        minmax(230px,1.2fr)
+        minmax(170px,.8fr);
+    gap:14px;
+    align-items:stretch;
+    overflow:visible;
+}
+
+.adventure-hud > *{
+    min-width:0;
+}
+
+.hud-main,
+.hud-badge-big,
+.hud-progress-card,
+.hud-score{
+    min-width:0;
+    height:100%;
+}
+
+.hud-main{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.hud-name{
+    font-size:clamp(18px,1.7vw,26px);
+    line-height:1.15;
+    white-space:normal;
+    overflow-wrap:anywhere;
+}
+
+.hud-class,
+.hud-small{
+    overflow-wrap:anywhere;
+}
+
+.hud-badge-big b,
+.hud-line b,
+.hud-score b{
+    overflow-wrap:anywhere;
+}
+
+.hud-score b{
+    font-size:clamp(28px,3vw,42px);
+}
+
+/* Màn hình vừa: chia 2 hàng, không tràn */
+@media(max-width:1180px){
+    .student-hud.adventure-hud,
+    .adventure-hud{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .hud-score{
+        grid-column:auto;
+    }
+}
+
+/* Màn hình nhỏ: mỗi mục một hàng */
+@media(max-width:680px){
+    .student-hud.adventure-hud,
+    .adventure-hud{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .hud-avatar{
+        width:50px;
+        height:50px;
+        font-size:28px;
+    }
+
+    .badge-icon{
+        width:48px;
+        height:48px;
+        font-size:28px;
+    }
+
+    .hud-score{
+        text-align:left;
+    }
+}
+
+/* Thu nhỏ riêng phần header trạm để không chen HUD */
+.student-card .student-name{
+    overflow-wrap:anywhere;
+    line-height:1.15;
+}
+
+.student-card .student-meta{
+    overflow-wrap:anywhere;
+    line-height:1.25;
+}
+
+
+/* =====================================================
+   FIX TÊN HỌC SINH DÀI KHÔNG BỂ HUD - v5.3.4
+===================================================== */
+
+/* Nới rộng ô thông tin học sinh, thu gọn các ô còn lại một chút */
+.student-hud.adventure-hud,
+.adventure-hud{
+    grid-template-columns:
+        minmax(260px,1.55fr)
+        minmax(190px,1fr)
+        minmax(170px,.9fr)
+        minmax(210px,1.1fr)
+        minmax(160px,.78fr);
+}
+
+/* Ô học sinh */
+.hud-main{
+    min-width:0;
+    display:grid;
+    grid-template-columns:64px minmax(0,1fr);
+    align-items:center;
+    gap:12px;
+}
+
+.hud-avatar{
+    width:58px;
+    height:58px;
+    font-size:30px;
+    flex:0 0 auto;
+}
+
+.hud-main > div:last-child{
+    min-width:0;
+    overflow:hidden;
+}
+
+/* Tên chỉ tối đa 2 dòng, không làm vỡ khung */
+.hud-name{
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:100%;
+    font-size:clamp(18px,1.55vw,24px);
+    line-height:1.12;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+/* Lớp nhỏ gọn */
+.hud-class{
+    font-size:clamp(14px,1.2vw,18px);
+    line-height:1.15;
+    margin-top:6px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* Huy hiệu không ép tên */
+.hud-badge-big{
+    min-width:0;
+    overflow:hidden;
+}
+
+.hud-badge-big b{
+    display:block;
+    white-space:normal;
+    line-height:1.15;
+    font-size:clamp(16px,1.35vw,21px);
+}
+
+/* Desktop vừa: 2 cột, ô học sinh chiếm cả hàng đầu cho đẹp */
+@media(max-width:1180px){
+    .student-hud.adventure-hud,
+    .adventure-hud{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .hud-main{
+        grid-column:1 / -1;
+    }
+}
+
+/* Mobile/tablet nhỏ */
+@media(max-width:680px){
+    .student-hud.adventure-hud,
+    .adventure-hud{
+        grid-template-columns:1fr;
+    }
+
+    .hud-main{
+        grid-column:auto;
+        grid-template-columns:54px minmax(0,1fr);
+    }
+
+    .hud-avatar{
+        width:50px;
+        height:50px;
+        font-size:26px;
+    }
+
+    .hud-name{
+        font-size:22px;
+        -webkit-line-clamp:2;
+    }
+}
+
+
+/* =====================================================
+   HUD 2 HÀNG: TÊN TRÊN - THÔNG TIN DƯỚI - v5.3.5
+===================================================== */
+.student-hud.hud-two-rows,
+.hud-two-rows{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:16px !important;
+    align-items:stretch;
+    width:100%;
+    max-width:100%;
+}
+
+.hud-two-rows .hud-student-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    min-width:0;
+    padding:2px 4px 4px;
+}
+
+.hud-two-rows .hud-student-info{
+    min-width:0;
+    display:flex;
+    align-items:baseline;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.hud-two-rows .hud-name{
+    display:block;
+    max-width:100%;
+    font-size:clamp(24px,2.25vw,34px);
+    line-height:1.1;
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+.hud-two-rows .hud-class{
+    font-size:clamp(17px,1.45vw,22px);
+    line-height:1.1;
+    white-space:nowrap;
+    color:#dbeafe;
+    font-weight:1000;
+    flex:0 0 auto;
+}
+
+.hud-two-rows .hud-avatar{
+    width:58px;
+    height:58px;
+    font-size:30px;
+    flex:0 0 58px;
+}
+
+.hud-two-rows .hud-info-row{
+    display:grid;
+    grid-template-columns:
+        minmax(200px,1fr)
+        minmax(190px,.9fr)
+        minmax(230px,1.15fr)
+        minmax(170px,.72fr);
+    gap:14px;
+    align-items:stretch;
+    min-width:0;
+}
+
+.hud-two-rows .hud-info-row > *{
+    min-width:0;
+    height:100%;
+}
+
+.hud-two-rows .hud-score{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.hud-two-rows .hud-score b{
+    font-size:clamp(30px,3vw,46px);
+}
+
+@media(max-width:1000px){
+    .hud-two-rows .hud-info-row{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:640px){
+    .hud-two-rows .hud-student-row{
+        align-items:flex-start;
+    }
+
+    .hud-two-rows .hud-student-info{
+        display:block;
+    }
+
+    .hud-two-rows .hud-name{
+        font-size:24px;
+    }
+
+    .hud-two-rows .hud-class{
+        margin-top:8px;
+        display:block;
+    }
+
+    .hud-two-rows .hud-info-row{
+        grid-template-columns:1fr;
+    }
+}
+
+
+/* =====================================================
+   GAME PROFILE HUD GỌN - v5.3.6
+   Chốt bố cục: 1 thẻ nhân vật + thống kê bên dưới
+===================================================== */
+.student-hud.game-profile-card,
+.game-profile-card{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:14px !important;
+    width:100%;
+    max-width:100%;
+    padding:18px 20px !important;
+    border-radius:28px;
+    background:
+        radial-gradient(circle at 8% 18%,rgba(255,213,79,.24),transparent 24%),
+        linear-gradient(145deg,rgba(15,23,42,.95),rgba(37,99,235,.55));
+    overflow:hidden;
+}
+
+.profile-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    min-width:0;
+}
+
+.profile-medal{
+    width:58px;
+    height:58px;
+    flex:0 0 58px;
+    display:grid;
+    place-items:center;
+    border-radius:20px;
+    font-size:32px;
+    border:3px solid #fff;
+    background:linear-gradient(145deg,#facc15,#fb923c);
+    box-shadow:0 6px 0 rgba(0,0,0,.25),0 0 22px rgba(250,204,21,.8);
+}
+
+.profile-title{
+    min-width:0;
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    flex-wrap:wrap;
+}
+
+.profile-class{
+    order:1;
+    flex:0 0 auto;
+    color:#dbeafe;
+    font-size:clamp(18px,1.45vw,24px);
+    font-weight:1000;
+    white-space:nowrap;
+    text-shadow:0 2px 0 rgba(0,0,0,.35);
+}
+
+.profile-name{
+    order:2;
+    min-width:0;
+    max-width:100%;
+    color:#fff7b0;
+    font-size:clamp(26px,2.7vw,42px);
+    font-weight:1000;
+    line-height:1.08;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+    text-shadow:0 3px 0 #7c2d12,0 0 16px rgba(255,213,79,.6);
+}
+
+.profile-stats{
+    display:grid;
+    grid-template-columns:
+        minmax(190px,1fr)
+        minmax(210px,1fr)
+        minmax(230px,1.15fr)
+        minmax(170px,.75fr);
+    gap:14px;
+    align-items:stretch;
+    min-width:0;
+}
+
+.profile-stat{
+    min-width:0;
+    padding:12px 14px;
+    border-radius:20px;
+    border:2px solid rgba(255,255,255,.24);
+    background:rgba(255,255,255,.09);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.04);
+}
+
+.profile-stat span{
+    display:block;
+    color:#dbeafe;
+    font-weight:1000;
+    font-size:clamp(13px,1.1vw,16px);
+}
+
+.profile-stat b{
+    display:block;
+    color:#fff7b0;
+    font-size:clamp(20px,1.9vw,30px);
+    font-weight:1000;
+    line-height:1.1;
+    overflow-wrap:anywhere;
+    text-shadow:0 2px 0 rgba(0,0,0,.35);
+}
+
+.badge-stat{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    border-color:rgba(255,213,79,.38);
+}
+
+.xp-stat,
+.progress-stat{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.stat-line{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.profile-stats .xp-bar,
+.profile-stats .learn-bar{
+    width:100%;
+    height:16px;
+    border-radius:999px;
+    overflow:hidden;
+    background:rgba(2,6,23,.7);
+    border:1px solid rgba(255,255,255,.25);
+}
+
+.profile-stats .xp-bar span{
+    display:block;
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(90deg,#facc15,#f59e0b,#fde68a);
+    box-shadow:0 0 16px rgba(255,213,79,.85);
+    transition:width .8s cubic-bezier(.2,.9,.2,1);
+}
+
+.profile-stats .learn-bar span{
+    display:block;
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(90deg,#22c55e,#86efac,#00e5ff);
+    box-shadow:0 0 16px rgba(34,197,94,.75);
+    transition:width .8s cubic-bezier(.2,.9,.2,1);
+}
+
+.profile-stat small{
+    display:block;
+    margin-top:6px;
+    text-align:right;
+    color:#dbeafe;
+    font-weight:1000;
+}
+
+.score-stat{
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    border-color:rgba(255,213,79,.44);
+    background:linear-gradient(145deg,rgba(245,158,11,.22),rgba(124,58,237,.24));
+}
+
+.score-stat b{
+    font-size:clamp(34px,3.5vw,54px);
+}
+
+/* Ẩn/ghi đè các HUD cũ để tránh CSS cũ can thiệp */
+.game-profile-card .hud-main,
+.game-profile-card .hud-info-row,
+.game-profile-card .hud-student-row{
+    display:none !important;
+}
+
+@media(max-width:980px){
+    .profile-stats{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:640px){
+    .profile-top{
+        align-items:flex-start;
+    }
+
+    .profile-title{
+        display:block;
+    }
+
+    .profile-name{
+        margin-top:6px;
+        font-size:26px;
+    }
+
+    .profile-class{
+        font-size:18px;
+    }
+
+    .profile-stats{
+        grid-template-columns:1fr;
+    }
+
+    .profile-medal{
+        width:50px;
+        height:50px;
+        flex-basis:50px;
+        font-size:28px;
+    }
+
+    .score-stat{
+        text-align:left;
+    }
+}

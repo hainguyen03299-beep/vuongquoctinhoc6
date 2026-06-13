@@ -1,0 +1,14 @@
+BẢN SỬA v5.3.7 - YOUTUBE NHÚNG ĐỂ ĐẾM %
+
+Đã sửa:
+- Bỏ nút mở sang YouTube trong nhiệm vụ video.
+- Học sinh phải xem video ngay trong khung nhúng của trang.
+- Hệ thống mới đếm được % xem video.
+- Đạt 90% mới mở nút nhận XP.
+- Nếu bấm mở trực tiếp youtube.com thì web KHÔNG thể biết học sinh đã xem bao nhiêu %, do chính sách của YouTube.
+
+Cần chép đè:
+- tram.js
+
+Khuyến nghị:
+- Chạy web bằng GitHub Pages/Netlify/Vercel thay vì file:/// để YouTube Iframe API ổn định hơn.
